@@ -1,0 +1,41 @@
+# Benchmark evaluator with dataset-based instance provider
+# This configuration evaluates the policy against multiple instances from a dataset
+# and tracks the best model based on mean gap to reference heuristic
+
+type: "benchmark"
+max_steps: 10000
+n_instances: 10
+
+# Best model saving settings
+save_best_model: true
+metric_mode: "min"  # "min" for makespan (lower is better), "max" for reward (higher is better)
+metric_key: "mean_gap"  # Track mean gap to reference heuristic
+
+# Dataset-based instance provider (default)
+# use_generator: false
+# dataset_filename: "jssp_instances/heuristic_solutions/solved_instances_6x6.json"
+# benchmark_heuristic: "fddmwr"  # Reference heuristic for gap calculation
+
+# Alternative: Generator-based instance provider with fixed reference
+# Uncomment to use instance generator instead of dataset:
+# use_generator: true
+# generator_type: "random_uniform"
+# generator_kwargs:
+#   min_duration: 1
+#   max_duration: 10
+# reference_makespan: 55  # Optional fixed reference for gap calculation
+
+# Alternative: Generator-based with on-the-fly heuristic reference
+# Uncomment to use heuristic as dynamic reference:
+use_generator: true
+use_heuristic_reference: true
+generator_type: "random_uniform"
+generator_kwargs:
+  min_duration: 1
+  max_duration: 99
+heuristic_name: "fddmwr"  # Heuristic to compute reference makespan on-the-fly
+
+# Alternative metric configurations:
+# For tracking best makespan:
+# metric_mode: "min"
+# metric_key: "mean_makespan"

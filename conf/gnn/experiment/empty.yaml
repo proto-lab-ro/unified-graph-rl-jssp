@@ -1,0 +1,10 @@
+# @package _global_
+# For naming subdir
+hydra:
+  mode: MULTIRUN
+  sweep:
+    dir: multirun/${now:%Y-%m-%d}/${now:%H-%M-%S}
+    subdir: "${env.instance}_${env.reward_function}_${hydra.job.num}"
+  sweeper:
+    max_batch_size: null
+    params:

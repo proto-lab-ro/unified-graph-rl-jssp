@@ -1,0 +1,18 @@
+# Standard evaluator with best model saving enabled
+# This configuration tracks the best model based on makespan and saves it
+
+type: "standard"
+max_steps: 500
+
+# Optional: Known lower bound for gap calculation
+# lower_bound: 55
+
+# Best model saving settings
+save_best_model: true
+metric_mode: "min"  # "min" for makespan (lower is better), "max" for reward (higher is better)
+metric_key: "gap_to_lb"  # Metric to track: "makespan", "avg_return", "mean_reward", etc.
+
+# Alternative configurations:
+# For tracking best reward instead of makespan:
+# metric_mode: "max"
+# metric_key: "avg_return"

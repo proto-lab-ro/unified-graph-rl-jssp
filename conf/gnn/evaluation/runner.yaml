@@ -1,0 +1,5 @@
+
+type: "runner"
+dataset_filename: "jssp_instances/heuristic_solutions/solved_instances_10x10.json" # or your dataset
+n_instances: 30
+benchmark_heuristic: "mwr"

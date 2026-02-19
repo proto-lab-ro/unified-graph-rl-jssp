@@ -1,0 +1,30 @@
+# Main Hydra configuration file
+# @package _global_
+
+defaults:
+  - env: ft06
+  - training: default
+  - gnn: default
+  - experiment: null
+  - pretrain: default
+  - hpo: default
+  - _self_
+
+seed: 42
+
+# Hydra configuration
+hydra:
+  run:
+    dir: outputs/${now:%Y-%m-%d}/${now:%H-%M-%S}
+  sweep:
+    dir: multirun/${now:%Y-%m-%d}/${now:%H-%M-%S}
+    subdir: ${hydra:job.num}
+  job:
+    chdir: false
+
+# Logging and output directories
+log_dir: ${hydra:runtime.output_dir}/logs
+save_dir: ${hydra:runtime.output_dir}/checkpoints
+
+# Device configuration (will be set automatically)
+device: auto

@@ -1,0 +1,13 @@
+# @package env
+instance: "jssp_instances/ft20"
+random_instance: true
+instance_generator: "random_uniform"
+instance_generator_kwargs:
+  min_duration: 1
+  max_duration: 100
+reward_function: "sparse_makespan"
+reward_kwargs: { scaling_factor: 0.01}
+observation_provider: "lb_bipartite_gnn"
+observation_kwargs: { normalize: "operation", self_loop: false , observation_type: "graph_matrix"}
+max_episode_steps: 500
+job_selector_type: "operation"

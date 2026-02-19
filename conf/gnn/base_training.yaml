@@ -1,0 +1,94 @@
+defaults:
+  - env: null
+  - training: null
+  - gnn: null
+  - experiment: null
+  - pretrain: null
+  - hpo: null
+  - evaluation: null
+  - _self_
+
+env:
+  instance: 20x20
+  random_instance: true
+  instance_generator: random_uniform
+  instance_generator_kwargs:
+    min_duration: 1
+    max_duration: 99
+  reward_function: reward_mixer
+  reward_kwargs:
+    reward_functions:
+    - operation_lower_bound_spread_normalized
+    - negative_sparse_makespan
+    weights:
+    - 0.2
+    - 1.0
+    reward_specific_kwargs:
+      operation_lower_bound_spread_normalized:
+        normalization: initial_lb
+        scaling_factor: 1.0
+      negative_sparse_makespan:
+        scaling_factor: 5.0
+  observation_provider: lb_bipartite_non_overlapping_gnn
+  observation_kwargs:
+    normalize: operation
+    self_loop: false
+    observation_type: graph_matrix
+  max_episode_steps: 1000
+  job_selector_type: operation
+training:
+  frames_per_batch: 1600
+  total_frames: 64000000
+  sub_batch_size: 1600
+  num_epochs: 1
+  clip_epsilon: 0.2
+  gamma: 0.995
+  lmbda: 1.0
+  entropy_eps: 0.001
+  max_steps: 10000
+  critic_coef: 0.5
+  average_gae: true
+  normalize_advantage: true
+  eval_freq: 61440
+  lr: 0.0003
+  logging_interval: 100
+  use_lr_scheduler: true
+  lr_scheduler_type: linear
+  max_grad_norm: 0.5
+  split_trajs: false
+  loss_critic_type: smooth_l1
+  action_masking: true
+  warmup_steps: 0
+gnn_feature_extractor:
+  hidden_dim: 64
+  k_layers: 3
+pretrain:
+  folder_name: null
+hpo:
+  n_trials: 100
+evaluation:
+  type: benchmark
+  max_steps: 10000
+  n_instances: 10
+  save_best_model: true
+  metric_mode: min
+  metric_key: mean_gap
+  use_generator: true
+  use_heuristic_reference: true
+  generator_type: random_uniform
+  generator_kwargs:
+    min_duration: 1
+    max_duration: 99
+  heuristic_name: fddmwr
+# curriculum:
+#   interval:
+#     update_interval_frames: 20480
+#   env:
+#     instance:
+#     - 6x6
+#     - 10x10
+#     - 15x15
+#     - 20x20
+log_dir: ${hydra:runtime.output_dir}/logs
+save_dir: ${hydra:runtime.output_dir}/checkpoints
+device: cpu

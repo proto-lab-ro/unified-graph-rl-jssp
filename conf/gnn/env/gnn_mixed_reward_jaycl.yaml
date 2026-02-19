@@ -1,0 +1,18 @@
+# @package env
+instance: "6x6"
+random_instance: true
+instance_generator: "predefined_instances"
+instance_generator_kwargs:
+  instances_file: './src/jssp_jay_cl/dataset/data_lite_r_normal/samples/element_0/instances.csv'
+reward_function: "reward_mixer"
+reward_kwargs:
+  reward_functions:
+    # - "normalized_heuristic_gap"
+    - "max_operation_lower_bound_difference"
+    - "negative_sparse_makespan"
+  # weights: [1.0]
+  weights: [0.2, 1.0]
+observation_provider: "lb_bipartite_gnn"
+observation_kwargs: { normalize: "operation", self_loop: false , observation_type: "graph_matrix"}
+max_episode_steps: 1000
+job_selector_type: "operation"

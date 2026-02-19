@@ -1,0 +1,21 @@
+# @package _global_
+# Configuration for hyperparameter sweeps
+defaults:
+  - override /env: ft06
+  - override /training: fast
+  - override /gnn: default
+
+hydra:
+  mode: MULTIRUN
+  sweeper:
+    _target_: hydra._internal.BasicSweeper
+    max_batch_size: null
+    params:
+      training.lr: 1e-6,5e-6,1e-5,5e-5,1e-4
+      training.clip_epsilon: 0.2,0.4,0.6
+      gnn_feature_extractor.hidden_dim: 12,24,48
+
+# Fast training for sweeps
+training:
+  total_frames: 20000
+  eval_freq: 200

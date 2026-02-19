@@ -1,0 +1,17 @@
+# @package env
+instance: "10x10"
+random_instance: true
+instance_generator: "random_uniform"
+instance_generator_kwargs:
+  min_duration: 1
+  max_duration: 99
+reward_function: "reward_mixer"
+reward_kwargs:
+  reward_functions:
+    - "max_operation_lower_bound_difference"
+    - "sparse_normalized_bound_scale"
+  weights: [0.50, 1.0]
+observation_provider: "lb_bipartite_gnn"
+observation_kwargs: { normalize: "operation", self_loop: false , observation_type: "graph_matrix"}
+max_episode_steps: 1000
+job_selector_type: "operation"

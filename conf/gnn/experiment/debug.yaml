@@ -1,0 +1,11 @@
+# @package _global_
+# Quick debugging experiment
+defaults:
+  - override /env: ft06
+  - override /training: fast
+  - override /gnn: default
+
+# Override specific parameters for debugging
+training:
+  total_frames: 1000
+  eval_freq: 100

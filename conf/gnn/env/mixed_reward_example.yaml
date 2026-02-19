@@ -1,0 +1,20 @@
+# @package env
+instance: "jssp_instances/ft06"
+random_instance: true
+instance_generator: "random_uniform"
+instance_generator_kwargs:
+  min_duration: 1
+  max_duration: 100
+reward_function: "reward_mixer"
+reward_kwargs:
+  reward_functions:
+    - "sparse_makespan"
+    - "operation_lower_bound_spread"
+  weights: [1.0, 0.5]
+  reward_specific_kwargs:
+    operation_lower_bound_spread:
+      scaling_factor: 0.005
+observation_provider: "lb_bipartite_gnn"
+observation_kwargs: { normalize: "operation", self_loop: false , observation_type: "graph_matrix"}
+max_episode_steps: 500
+job_selector_type: "operation"
