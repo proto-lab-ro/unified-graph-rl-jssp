@@ -26,15 +26,15 @@ LABEL_MAP = {
     "random": "Random",
     "mor": "MOR",
     "mwr": "MWKR",
-    "fddmwr": "FDDMWR",
-    TARGET_ML_SOLVER: "Ours",
+    "fddmwr": "FDD/MWR",
+    TARGET_ML_SOLVER: "Ours (Single)",
 }
 COLOR_MAP = {
     "Random": "#FFFFFF",
-    "MOR": "#E0E0E0",
-    "MWKR": "#B0B0B0",
-    "FDDMWR": "#808080",
-    "Ours": "#000000",
+    "MOR": "#DFDFDF",
+    "MWKR": "#BFBFBF",
+    "FDDMWR": "#9F9F9F",
+    "Ours (Single)": "#7A7A7A",
 }
 
 
@@ -194,7 +194,7 @@ def plot_scalability(df):
         plot_df["size"], categories=sorted_sizes, ordered=True
     )
 
-    label_map = {TARGET_ML_SOLVER: "OURS", "fddmwr": "FDDMWR"}
+    label_map = {TARGET_ML_SOLVER: "Ours (Single)", "fddmwr": "FDD/MWR"}
     plot_df["solver_label"] = plot_df["solver_id_norm"].map(label_map)
 
     fig, ax = plt.subplots(figsize=(3.5, 2.0))
@@ -204,7 +204,7 @@ def plot_scalability(df):
         x="size",
         y="gap",
         hue="solver_label",
-        hue_order=["OURS", "FDDMWR"],
+        hue_order=["Ours (Single)", "FDD/MWR"],
         split=True,
         inner="quartile",
         palette=["#FFFFFF", "#E0E0E0"],
@@ -222,8 +222,8 @@ def plot_scalability(df):
                 collection.set_edgecolor("black")
 
     legend_handles = [
-        Patch(facecolor="#FFFFFF", edgecolor="black", label="OURS"),
-        Patch(facecolor="#E0E0E0", edgecolor="black", hatch="////", label="FDDMWR"),
+        Patch(facecolor="#FFFFFF", edgecolor="black", label="Ours (Single)"),
+        Patch(facecolor="#E0E0E0", edgecolor="black", hatch="////", label="FDD/MWR"),
     ]
     ax.legend(
         handles=legend_handles,
@@ -238,9 +238,15 @@ def plot_scalability(df):
         FuncFormatter(lambda x, pos: f"{x:.2g}" if x != 0 else "0")
     )
     ax.set_ylabel("Optimality Gap (%)")
-    ax.set_xlabel("Problem Size ($J \\times K$)")
+    ax.set_xlabel(r"Problem Sizes (Jobs $\times$ Machines)")
     ax.yaxis.grid(True, linestyle=":", alpha=0.5)
     sns.despine()
+
+    formatted_size_labels = [
+        s.replace("x", r"$\times$") if "x" in str(s) else s for s in sorted_sizes
+    ]
+    ax.set_xticks(range(len(sorted_sizes)))
+    ax.set_xticklabels(formatted_size_labels, rotation=90)
     plt.xticks(rotation=90)
 
     plt.tight_layout(pad=0.2)
@@ -320,15 +326,15 @@ def plot_generalization(df):
     plot_df = plot_df.sort_values("size")
 
     label_map = {
-        "20x20": "20x20",
-        "25x25": "25x25",
-        "30x20": "30x20",
-        "10x10": "10x10",
-        "fddmwr": "FDDMWR",
-        "30x10": "30x10",
-        "40x10": "40x10",
-        "50x10": "50x10",
-        "40x20": "40x20",
+        "20x20": r"20$\times$20",
+        "25x25": r"25$\times$25",
+        "30x20": r"30$\times$20",
+        "10x10": r"10$\times$10",
+        "fddmwr": "FDD/MWR",
+        "30x10": r"30$\times$10",
+        "40x10": r"40$\times$10",
+        "50x10": r"50$\times$10",
+        "40x20": r"40$\times$20",
     }
     plot_df["legend_label"] = plot_df["train_size"].map(label_map)
 
@@ -440,7 +446,7 @@ def plot_generalization(df):
             ax=ax,
         )
 
-    ax.set_xlabel("Test Instance Size", fontsize=9)
+    ax.set_xlabel(r"Problem Sizes Jobs $\times$ Machines", fontsize=9)
     ax.set_ylabel("Optimality Gap (%)", fontsize=9)
     ax.yaxis.set_major_formatter(mtick.PercentFormatter(decimals=0))
     ax.set_yticks([20, 40, 60])
@@ -481,7 +487,12 @@ def plot_generalization(df):
         handletextpad=0.4,
         handlelength=1.5,
     )
-    plt.xticks(rotation=90)
+
+    formatted_size_labels = [
+        s.replace("x", r"$\times$") if "x" in str(s) else s for s in sorted_sizes
+    ]
+    ax.set_xticks(range(len(sorted_sizes)))
+    ax.set_xticklabels(formatted_size_labels, rotation=90)
 
     plt.tight_layout()
     plt.savefig(
@@ -543,15 +554,15 @@ def plot_ratio_generalization(df):
     plot_df = plot_df.dropna(subset=["ratio_n_m"])
 
     label_map = {
-        "20x20": "20x20",
-        "25x25": "25x25",
-        "30x20": "30x20",
-        "10x10": "10x10",
-        "fddmwr": "FDDMWR",
-        "30x10": "30x10",
-        "40x10": "40x10",
-        "50x10": "50x10",
-        "40x20": "40x20",
+        "20x20": r"20$\times$20",
+        "25x25": r"25$\times$25",
+        "30x20": r"30$\times$20",
+        "10x10": r"10$\times$10",
+        "fddmwr": r"FDD/MWR",
+        "30x10": r"30$\times$10",
+        "40x10": r"40$\times$10",
+        "50x10": r"50$\times$10",
+        "40x20": r"40$\times$20",
     }
     plot_df["legend_label"] = plot_df["train_size"].map(label_map)
 
@@ -667,7 +678,7 @@ def plot_ratio_generalization(df):
         )
 
     ax.set_ylabel("Optimality Gap (%)", fontsize=9)
-    ax.set_xlabel("$J/M$ Ratio (Jobs / Machines)", fontsize=9)
+    ax.set_xlabel("Ratio (Jobs $/$ Machines)", fontsize=9)
     ax.yaxis.set_major_formatter(mtick.PercentFormatter(decimals=0))
     ax.set_yticks([20, 40, 60])
 
